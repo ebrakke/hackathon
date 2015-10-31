@@ -1,0 +1,26 @@
+{
+  "name": "hackathon",
+  "description": "frontend",
+  "main": "",
+  "authors": [
+    "Tyler Waltze <tylerwaltze@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/ebrakke/hackathon",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.4.7",
+    "lodash": "~3.10.1",
+    "angular-route": "~1.4.7",
+    "angular-sanitize": "~1.4.7",
+    "angular-animate": "~1.4.7"
+  }
+}
