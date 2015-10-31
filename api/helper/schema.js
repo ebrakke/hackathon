@@ -10,5 +10,13 @@ var userSchema = new Schema({
 });
 
 var transactionSchema = new Schema({
+    requester:     String,
+    fulfiller:     String,
+    status:        String,
+    amount:        Number
+});
 
+var vTokenSchema = new Schema({
+    user:   String,
+    vToken: String
 });
