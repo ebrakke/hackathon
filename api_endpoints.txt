@@ -1,0 +1,78 @@
+##USER
+GET
+  /:id
+  returns
+  {
+    userID
+    email
+    name (first, last)
+    phone_number
+  }
+POST
+  / (create)
+  {
+    email
+    name
+    password
+    phone_number
+  }
+
+  /auth
+  {
+    email
+    password
+  } --> authToken
+
+  /online
+  {
+    authToken
+    amount
+    location
+  }
+
+  /offline
+  {
+    authToken
+  }
+
+##TRANSACTION
+GET
+  /:id --> status of id
+    {
+      requester
+        {
+          userID
+          email
+          loc
+          name (name, last)
+        }
+
+      fulfiller
+      {
+        userID
+        email
+        loc
+        name (first, last)
+      }
+      amount
+      status ("pending", "accepted", "completed")
+    }
+
+POST
+  /
+  {
+    authToken
+    amount
+    location
+  } --> transactionID
+
+  /:id/verify
+  {
+    code
+  }
+
+DELETE
+  /:id
+  {
+    authToken
+  }

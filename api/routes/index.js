@@ -1,9 +1,10 @@
 var express = require('express');
-var router = express.Router();
+var envelope = require('../middlewares/envelope');
+var index = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+index.get('/', function(req, res, next) {
+    res.locals.data = {msg: 'Hello World!'};
+    next();
+}, envelope);
 
-module.exports = router;
+module.exports = index;
