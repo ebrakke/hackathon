@@ -19,5 +19,10 @@
     "sub": true,
 
     "browser": true,
-    "node": true
+    "node": true,
+
+    "globals": {
+        "angular": true,
+        "app": true
+    }
 }

@@ -11,8 +11,6 @@
 
 	outline: none;
 	border: none;
-	border-bottom-style: solid;
-	border-bottom-width: 1px;
 
 	display: inline-block;
 	padding: .6em 1em;
@@ -24,78 +22,89 @@
 
 	.newColoredButton(@accent);
 
-	&-size {
-		&--small {
-
-		}
-
-		&--medium {
-			font-size: 1.2rem;
-		}
-
-		&--large {
-
-		}
-
-		&--fullWidth {
-			width: 100%;
-		}
+	&--small {
+		&:extend(.button);
 	}
 
-	&-color {
-		&--twitter {
-			@baseColor: #00ACED;
+	&--medium {
+		&:extend(.button);
 
-			.newColoredButton(@baseColor);
-		}
+		font-size: 1.2rem;
+	}
 
-		&--facebook {
-			letter-spacing: -.1em;
+	&--large {
+		&:extend(.button);
+	}
 
-			@baseColor: #3B5999;
+	&--fullWidth {
+		&:extend(.button);
 
-			.newColoredButton(@baseColor);
-		}
+		width: 100%;
+		padding: .3em 0;
+	}
 
-		&--dark {
-			@baseColor: darken(@accent, 5%);
+	&--twitter {
+		@baseColor: #00ACED;
 
-			.newColoredButton(@baseColor);
-		}
+		.newColoredButton(@baseColor);
+	}
 
-		&--blue {
-			@baseColor: @blue;
+	&--facebook {
+		letter-spacing: -.1em;
 
-			.newColoredButton(@baseColor);
-		}
+		@baseColor: #3B5999;
 
-		&--green {
-			@baseColor: @green;
+		.newColoredButton(@baseColor);
+	}
 
-			.newColoredButton(@baseColor);
-		}
+	&--dark {
+		@baseColor: darken(@accent, 5%);
 
-		&--red {
-			@baseColor: @red;
+		.newColoredButton(@baseColor);
+	}
 
-			.newColoredButton(@baseColor);
-		}
+	&--blue {
+		@baseColor: @blue;
 
-		&--orange {
-			@baseColor: @orange;
+		.newColoredButton(@baseColor);
+	}
 
-			.newColoredButton(@baseColor);
-		}
+	&--green {
+		@baseColor: @green;
 
-		&--yellow {
-			@baseColor: @yellow;
+		.newColoredButton(@baseColor);
+	}
 
-			.newColoredButton(@baseColor);
-		}
+	&--red {
+		@baseColor: @red;
+
+		.newColoredButton(@baseColor);
+	}
+
+	&--orange {
+		@baseColor: @orange;
+
+		.newColoredButton(@baseColor);
+	}
+
+	&--yellow {
+		@baseColor: @yellow;
+
+		.newColoredButton(@baseColor);
+	}
+
+	&--white {
+		@baseColor: #fff;
+
+		.newColoredButton(@baseColor);
+
+		color: @grey-darkest;
 	}
 }
 
 .newColoredButton(@baseColor) {
+	&:extend(.button);
+
 	background: @baseColor;
 	border-color: darken(@baseColor, 15%);
 
