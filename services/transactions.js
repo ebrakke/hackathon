@@ -27,4 +27,4 @@ Transaction.create = function(user, amount) {
     });
 };
 
-module.exports = User;
+module.exports = Transaction;
