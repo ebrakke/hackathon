@@ -1,6 +1,7 @@
 var express = require('express');
 var envelope = require('../middlewares/envelope');
 var authorize = require('../middlewares/authorize');
+var Transaction = require('../services/transactions');
 var transactions = express.Router();
 
 transactions.get('/:id', authorize.auth, function(req, res, next) {
