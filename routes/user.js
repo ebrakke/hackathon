@@ -26,21 +26,12 @@ user.get('/:id', function(req, res, next) {
 
 user.post('/', validate.user, function(req, res, next) {
     var user = req.body;
-    var stubbedData = {
-        name : 'Rick Sanchez',
-        email : 'wubbalubbadubdub@earth.com',
-        userID : '00000001',
-        phoneNum : 1111111111,
-        accepting : true,
-        amount : 110,
-        credit : 20,
-        location : {
-            latitude: 902,
-            longitude: 339
-        }
-    }; /* HERE */
-    res.locals.data = stubbedData;
-    next();
+    var user_out = User.create(req.body).then(function(user_info) {
+        user_info.pHash = '';
+        res.locals.data;
+        next();
+    });
+
 }, envelope);
 
 user.post('/auth', function(req, res, next) {
