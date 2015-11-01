@@ -1,14 +1,11 @@
 var q = require('q');
 var db = require('../helper/dbConnector');
-<<<<<<< HEAD
 var util = require('../helper/utilities');
 var bcrypt = require('bcrypt');
 var USER_NOT_FOUND = {code: 404, msg: 'User not found'};
 var EMAIL_IN_USE = {code: 400, msg: 'Email already in use by a user'};
 
-=======
 var bcrypt = require('bcrypt');
->>>>>>> origin/master
 var User = {};
 
 var INVALID_USERNAME_OR_PASSWORD = {code: 401, msg: 'Invalid Username or Password'};
