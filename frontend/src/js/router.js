@@ -14,5 +14,8 @@ app.config(function($routeProvider) {
     }).when('/login', {
         templateUrl: 'partials/pages/login.html',
         controller: 'LoginCtrl'
+    }).when('/register', {
+        templateUrl: 'partials/pages/register.html',
+        controller: 'RegisterCtrl'
     });
 });
