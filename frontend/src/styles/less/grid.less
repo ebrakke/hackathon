@@ -20,6 +20,14 @@
         text-align: center;
     }
 
+    &--middle {
+        &:extend(.grid);
+
+        & > [class*="block-"] {
+            vertical-align: middle;
+        }
+    }
+
     &--right {
         &:extend(.grid);
 
