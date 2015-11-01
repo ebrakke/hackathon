@@ -16,7 +16,7 @@ User.get = function(userID) {
     //return user;
     return db.gets('users', {userID: userID}).then(function(user) {
         if (user.length === 0) {
-            return q.Reject(USER_NOT_FOUND);
+            return q.reject(USER_NOT_FOUND);
         }
         console.log(user[0]);
         return user[0];
@@ -26,7 +26,7 @@ User.get = function(userID) {
 User.create = function(user) {
     return db.gets('users', {email: user.email}).then(function(foundUser) {
         if (foundUser.length !== 0) {
-            return q.Reject(EMAIL_IN_USE);
+            return q.reject(EMAIL_IN_USE);
         } else {
             var salt = bcrypt.genSaltSync(10);
             var pw = user.password;
@@ -46,9 +46,13 @@ User.create = function(user) {
 };
 
 User.login = function(userData) {
-    return db.gets('users', {email: userData.email}).then(function(user) {
-        if (!bcrypt.compareSync(userData.password, user.pHash) || user.length === 0) {
-            return q.Reject(INVALID_USERNAME_OR_PASSWORD);
+    return db.gets('users', {email: userData.email}).then(function(userList) {
+        if (userList.length === 0) {
+            return q.reject(INVALID_USERNAME_OR_PASSWORD);
+        }
+        var user = userList[0];
+        if (!bcrypt.compareSync(userData.password, user.pHash)) {
+            return q.reject(INVALID_USERNAME_OR_PASSWORD);
         }
         delete user.pHash;
         return user;
@@ -64,7 +68,7 @@ User.goOnline = function(user, amount) {
             return u;
         });
     }).fail(function() {
-        return q.Reject(DB_ERROR);
+        return q.reject(DB_ERROR);
     });
 };
 

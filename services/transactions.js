@@ -11,7 +11,7 @@ var INVALID_VERIFICATION_CODE = {code: 400, msg: 'The verification code is incor
 Transaction.get = function(id) {
     return db.gets('transactions', {tID: id}).then(function(transaction) {
         if (transaction.length === 0) {
-            return q.Reject(TRANSACTION_NOT_FOUND);
+            return q.reject(TRANSACTION_NOT_FOUND);
         }
         console.log(transaction[0]);
         return transaction[0];
@@ -20,7 +20,7 @@ Transaction.get = function(id) {
 
 Transaction.create = function(user, amount) {
     if (user.credit < amount) {
-        return q.Reject(INSUFFICIENT_CREDIT);
+        return q.reject(INSUFFICIENT_CREDIT);
     }
     var transaction = {
         requester: user,
@@ -31,7 +31,7 @@ Transaction.create = function(user, amount) {
     return db.insert('transactions', transaction).then(function() {
         return transaction;
     }).fail(function() {
-        q.Reject(DB_ERROR);
+        q.reject(DB_ERROR);
     });
 };
 
@@ -47,14 +47,14 @@ Transaction.accept = function(tID, user) {
             console.log(err);
         });
     }).fail(function() {
-        q.Reject(DB_ERROR);
+        q.reject(DB_ERROR);
     });
 };
 
 Transaction.verify = function(code, tID) {
     return Transaction.get(tID).then(function(transaction) {
         if (transaction.code !== code) {
-            return q.Reject(INVALID_VERIFICATION_CODE);
+            return q.reject(INVALID_VERIFICATION_CODE);
         }
         return db.update('transaction', {tID: transaction.tID}, {status: 'complete'}).then(function() {
             return true;
