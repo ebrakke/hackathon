@@ -24,7 +24,12 @@ exports.insert = function(col, doc) {
                 console.log('successful save');
             });
         });
+    })
+    .fail(function(e) {
+        console.log("Something went wrong on insert!");
+        console.log(e);
     });
+
 };
 
 exports.remove = function(col, doc) {

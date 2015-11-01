@@ -35,14 +35,14 @@ User.create = function(user) {
             var hash = bcrypt.hashSync(pw, salt);
             console.log("The password hashed: " + hash);
             var token = util.generateToken();
-            Object.defineProperty(user, "authToken", token);
+            console.log("The authToken is: " + token);
             user.pHash = hash;
             var genID = util.createId(user.email, 'sha256');
-            //Object.defineProperty(user, "userID", genID);
+            console.log("The userID is: " + genID);
+            user.authToken = token;
             user.userID = genID;
-
             return db.insert('users', user).then(function(user) {
-                return User.get(genID);
+                User.get(genID);
             });
         }
     });
@@ -81,7 +81,6 @@ User.goOffline = function(user) {
         return q.Reject(DB_ERROR);
     });
 };
-//console.log(User.create({"name" : "Jenny Jenny", "email" : "something@xyz.com", "pHash" : "wololo", "phoneNum" : 8675309, "accepting" : true, "amount" : 45, "credit" : 67, "location" : { "latitude" : 9, "longitude" : 22 } }));
-
+console.log(User.create({"name" : "Jenny Jenny", "email" : "somethingelse@xyz.com", "pHash" : "wololo", "phoneNum" : 8675309, "accepting" : true, "amount" : 45, "credit" : 67, "location" : { "latitude" : 9, "longitude" : 22 } }));
 
 module.exports = User;
