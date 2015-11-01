@@ -9,9 +9,12 @@ exports.auth = function(req, res, next) {
         next(UNAUTHORIZED);
         return;
     }
-    var auth = new Auth();
-    res.locals.user = auth.validateAuthToken(authToken);
-    next();
+    Auth.validateAuthToken(authToken).then(function(user) {
+        res.locals.user = user;
+        next();
+    }).fail(function(err) {
+        next(err);
+    });
 };
 
 exports.createAuth = function(req, res, next) {
