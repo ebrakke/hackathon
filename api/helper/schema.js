@@ -6,7 +6,13 @@ var userSchema = new Schema({
     email:      String,
     pHash:      String,
     userID:     String,
-    phoneNum:   Number
+    phoneNum:   Number,
+    location: {
+        latitude:   Number,
+        longitude:  Number
+    },
+    accepting:  Boolean,
+    amount:     Number
 });
 
 var transactionSchema = new Schema({
