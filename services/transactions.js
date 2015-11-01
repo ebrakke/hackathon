@@ -62,6 +62,7 @@ Transaction.verify = function(code, tID) {
             return db.gets('users', {userID: transaction.fulfiller}).then(function(user) {
                 user[0].amount = parseInt(user.amount) - parseInt(transaction.amount);
                 user[0].credit = user[0].credit + 5 * parseInt(transaction.amount);
+                user[0].online = false;
                 return db.update('users', {userID: user[0].userID}, user[0]).then(function() {
                     return db.gets('users', {userID: transaction.requester.userID}).then(function(req) {
                         req[0].credit = req[0].credit - transaction.amount;
