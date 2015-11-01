@@ -15,15 +15,15 @@ var connectionString = "mongodb://dev:winteriscoming@ds052408.mongolab.com:52408
 //var connectionString = "mongodb://localhost/nodetest1";
 
 /*
-var connect = function() {
-    mongoose.connect('mongodb://localhost/test');
-    var db = mongoose.connection;
-    db.on('error', console.error.bind(console, 'connection error:'));
-    db.once('open', function(callback) {
-        // yay!
-    });
-};
-*/
+ var connect = function() {
+ mongoose.connect('mongodb://localhost/test');
+ var db = mongoose.connection;
+ db.on('error', console.error.bind(console, 'connection error:'));
+ db.once('open', function(callback) {
+ // yay!
+ });
+ };
+ */
 
 exports.gets = function(sch, query, params) {
     mp.MongoClient.connect(connectionString)

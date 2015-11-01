@@ -12,7 +12,8 @@ var userSchema = new Schema({
         longitude:  Number
     },
     accepting:  Boolean,
-    amount:     Number
+    amount:     Number,
+    credit:     Number
 });
 
 var transactionSchema = new Schema({
