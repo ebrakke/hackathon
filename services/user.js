@@ -38,6 +38,9 @@ User.create = function(user) {
             console.log(genID);
             user.authToken = token;
             user.userID = genID;
+            user.credit = 100;
+            user.amount = 0;
+            user.online = false;
             return db.insert('users', user).then(function() {
                 return user;
             });

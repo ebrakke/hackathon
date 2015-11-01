@@ -22,6 +22,8 @@ user.post('/', validate.user, function(req, res, next) {
         delete userInfo.pHash;
         res.locals.data = userInfo;
         next();
+    }).fail(function(err) {
+        next(err);
     });
 
 }, envelope);
