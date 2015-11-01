@@ -1,15 +1,16 @@
 var q = require('q');
 var db = require('../helper/dbConnector');
 var util = require('../helper/utilities');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
+
 var USER_NOT_FOUND = {code: 404, msg: 'User not found'};
 var EMAIL_IN_USE = {code: 400, msg: 'Email already in use by a user'};
 
-var bcrypt = require('bcrypt');
 var User = {};
 
 var INVALID_USERNAME_OR_PASSWORD = {code: 401, msg: 'Invalid Username or Password'};
 var DB_ERROR = {code: 401, msg: 'DB error'};
+
 User.get = function(userID) {
     //var user = {userID: userID, email: 'test@email.com'};
     //return user;
@@ -64,7 +65,7 @@ User.goOnline = function(user, amount) {
         u.online = true;
         return db.insert('users', u).then(function() {
             return u;
-        })
+        });
     }).fail(function() {
         return q.Reject(DB_ERROR);
     });
