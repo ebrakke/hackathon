@@ -64,16 +64,20 @@ Transaction.verify = function(code, tID) {
 };
 
 Transaction.search = function(user, loc) {
+    console.log('services search');
     return db.update('users', {userID: user.userID}, {location: loc}).then(function() {
-        user.amount = 100000;
-        return db.gets('transactions', {
-            $and : [
-                {status: 'pending'},
-                {amount: {$lte: 100}}]}).then(function(transactions) {
-            console.log(transactions);
-            if (transactions.length !== 0) {
-                return transactions[0];
-            }
+        //user.amount = 100000;
+        return db.gets('users', {userID: user.userID}).then(function(u){
+            return db.gets('transactions', {
+                $and : [
+                    {status: 'pending'},
+                    {amount: {$lte: u.amount}}]}).then(function(transactions) {
+                console.log(transactions);
+                if (transactions.length !== 0) {
+                    return transactions[0];
+                }
+        })
+
         }).fail(function(err) {
             console.log(err);
         });

@@ -5,6 +5,7 @@ var Transaction = require('../services/transactions');
 var transactions = express.Router();
 
 transactions.get('/search', authorize.auth, function(req, res, next) {
+    console.log('routes search');
     var location = {
         lat: parseInt(req.query.lat),
         lng: parseInt(req.query.lng)
