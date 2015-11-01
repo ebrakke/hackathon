@@ -49,8 +49,8 @@ transactions.post('/:id/accept', authorize.auth, function(req, res, next) {
 }, envelope);
 
 transactions.post('/:id/verify', authorize.auth, function(req, res, next) {
-    Transaction.verify(req.body.code, req.params.id).then(function() {
-        res.locals.data = {msg: 'Success'};
+    Transaction.verify(req.body.code, req.params.id).then(function(transaction) {
+        res.locals.data = transaction;
         next();
     }).fail(function(err) {
         next(err);

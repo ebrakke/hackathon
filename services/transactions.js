@@ -66,8 +66,11 @@ Transaction.verify = function(code, tID) {
                 return db.update('users', {userID: user[0].userID}, user[0]).then(function() {
                     return db.gets('users', {userID: transaction.requester.userID}).then(function(req) {
                         req[0].credit = req[0].credit - transaction.amount;
-                        console.log(req);
-                        return db.update('users', {userID: req[0].userID}, req[0]);
+                        return db.update('users', {userID: req[0].userID}, req[0]).then(function() {
+                            transaction.fulfiller = user;
+                            transaction.requester = req;
+                            return transaction;
+                        });
                     });
                 });
             });
