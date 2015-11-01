@@ -17,13 +17,15 @@ var userSchema = new Schema({
 });
 
 var transactionSchema = new Schema({
-    requester:     String,
-    fulfiller:     String,
-    status:        String,
-    amount:        Number
+    tID:            Number,
+    requester:      String,
+    fulfiller:      String,
+    status:         String,
+    amount:         Number,
+    token:          Number
 });
 
 var vTokenSchema = new Schema({
-    user:   String,
+    uID:   String,
     vToken: String
 });
