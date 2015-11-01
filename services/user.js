@@ -61,10 +61,11 @@ User.login = function(userData) {
 
 User.goOnline = function(user, amount) {
     return db.gets('users', {userID: user.userID}).then(function(u) {
+        u = u[0];
         u.amount = amount;
         u.location = user.location;
         u.online = true;
-        return db.insert('users', u).then(function() {
+        return db.update('users', {userID: u.userID}, u).then(function() {
             return u;
         });
     }).fail(function() {
@@ -74,12 +75,13 @@ User.goOnline = function(user, amount) {
 
 User.goOffline = function(user) {
     return db.gets('users', {userID: user.userID}).then(function(u) {
+        u = u[0];
         u.online = false;
-        return db.insert('users', u).then(function() {
+        return db.update('users', {userID: u.userID}, u).then(function() {
             return u;
         });
     }).fail(function() {
-        return q.Reject(DB_ERROR);
+        return q.reject(DB_ERROR);
     });
 };
 
