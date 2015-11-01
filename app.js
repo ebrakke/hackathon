@@ -22,7 +22,7 @@ app.use('/transaction', transactions);
 // For error handling
 app.use(errorHandle);
 
-var port = 3000;
+var port = process.env.PORT || 3000;
 
 app.listen(port);
 

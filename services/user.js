@@ -1,12 +1,18 @@
 var q = require('q');
 var db = require('../helper/dbConnector');
+<<<<<<< HEAD
 var util = require('../helper/utilities');
 var bcrypt = require('bcrypt');
 var USER_NOT_FOUND = {code: 404, msg: 'User not found'};
 var EMAIL_IN_USE = {code: 400, msg: 'Email already in use by a user'};
 
+=======
+var bcrypt = require('bcrypt');
+>>>>>>> origin/master
 var User = {};
 
+var INVALID_USERNAME_OR_PASSWORD = {code: 401, msg: 'Invalid Username or Password'};
+var DB_ERROR = {code: 401, msg: 'DB error'};
 User.get = function(userID) {
     //var user = {userID: userID, email: 'test@email.com'};
     //return user;
@@ -45,23 +51,39 @@ User.create = function(user) {
 };
 
 User.login = function(userData) {
-    /* TODO: implement this with the DB
-       Get the user based on the email and compare the password hash with the
-       given password.  Return the user object (minus the password) if success
-     */
-    var user = {
-        userId: 'some id',
-        email: 'valid@email.com'
-    };
-    return user;
+    return db.gets('users', {email: userData.email}).then(function(user) {
+        if (!bcrypt.compareSync(userData.password, user.pHash) || user.length === 0) {
+            return q.Reject(INVALID_USERNAME_OR_PASSWORD);
+        }
+        delete user.pHash;
+        return user;
+    });
 };
 
 User.goOnline = function(user, amount) {
-    /* TODO: implement this function with the DB
-       Put the user into an online state in the DB for the specified amount
-     */
-    return true;
+    return db.gets('users', {userID: user.userID}).then(function(u) {
+        u.amount = amount;
+        u.location = user.location;
+        u.online = true;
+        return db.insert('users', u).then(function() {
+            return u;
+        })
+    }).fail(function() {
+        return q.Reject(DB_ERROR);
+    });
+};
+
+User.goOffline = function(user) {
+    return db.gets('users', {userID: user.userID}).then(function(u) {
+        u.online = false;
+        return db.insert('users', u).then(function() {
+            return u;
+        });
+    }).fail(function() {
+        return q.Reject(DB_ERROR);
+    });
 };
 //console.log(User.create({"name" : "Wheres Waldo", "email" : "hereiam@xyz.com", "pHash" : "poplo", "phoneNum" : 12434543, "accepting" : true, "amount" : 45, "credit" : 67, "location" : { "latitude" : 9, "longitude" : 22 } }));
+
 
 module.exports = User;
