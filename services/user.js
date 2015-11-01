@@ -79,6 +79,7 @@ User.goOnline = function(user, amount) {
 User.goOffline = function(user) {
     return db.gets('users', {userID: user.userID}).then(function(u) {
         u = u[0];
+        delete u.pHash;
         u.online = false;
         u.amount = 0;
         return db.update('users', {userID: u.userID}, u).then(function() {

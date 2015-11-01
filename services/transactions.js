@@ -29,8 +29,9 @@ Transaction.create = function(user, amount) {
     };
     transaction.tID = utilities.createId({r: Math.random().toString(32)});
     return db.insert('transactions', transaction).then(function() {
-        return db.update('')
-        return transaction;
+        return db.update('users', {userID: transaction.requester.userID}, {online: false}).then(function() {
+            return transaction;
+        })
     }).fail(function() {
         q.reject(DB_ERROR);
     });
@@ -58,7 +59,17 @@ Transaction.verify = function(code, tID) {
             return q.reject(INVALID_VERIFICATION_CODE);
         }
         return db.update('transactions', {tID: transaction.tID}, {status: 'complete'}).then(function() {
-            return db.update('user', {userID: transaction.fulfiller}, {$inc: {amount: (-1 * parseInt(transaction.amount))}});
+            return db.gets('users', {userID: transaction.fulfiller}).then(function(user) {
+                user[0].amount = parseInt(user.amount) - parseInt(transaction.amount);
+                user[0].credit = user[0].credit + 5 * parseInt(transaction.amount);
+                return db.update('users', {userID: user[0].userID}, user[0]).then(function() {
+                    return db.gets('users', {userID: transaction.requester.userID}).then(function(req) {
+                        req[0].credit = req[0].credit - transaction.amount;
+                        console.log(req);
+                        return db.update('users', {userID: req[0].userID}, req[0]);
+                    });
+                });
+            });
         });
     });
 };
@@ -68,8 +79,8 @@ Transaction.search = function(user, loc) {
         return db.gets('transactions', {
             $and : [
                 {status: 'pending'},
+                {'requester.userID': {$ne: user.userID}},
                 {amount: {$lte: 100}}]}).then(function(transactions) {
-            console.log(transactions);
             if (transactions.length !== 0) {
                 return transactions[0];
             }
