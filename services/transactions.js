@@ -84,8 +84,7 @@ Transaction.search = function(user, loc) {
             if (transactions.length !== 0) {
                 return transactions[0];
             }
-        }).fail(function(err) {
-            console.log(err);
+            return q.reject(TRANSACTION_NOT_FOUND);
         });
     });
 };
