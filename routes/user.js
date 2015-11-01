@@ -26,6 +26,7 @@ user.post('/', validate.user, function(req, res, next) {
 
 }, envelope);
 
+
 user.post('/auth', validate.checkLogin, function(req, res, next) {
     var userInupt = req.body;
     User.login(userInupt).then(function(user) {
@@ -59,6 +60,17 @@ user.post('/:id/offline', authorize.auth, function(req, res, next) {
         next(err);
     });
 
+}, envelope);
+
+user.post('/authorize', authorize.auth, function(req, res, next) {
+    var venmoToken = req.body.venmoToken;
+    var user = res.locals.user;
+    User.authorize(user, venmoToken).then(function(result){
+        res.locals.data = result;
+        next();
+    }).fail(function(err) {
+        next(err);
+    });
 }, envelope);
 
 module.exports = user;

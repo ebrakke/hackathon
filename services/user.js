@@ -85,4 +85,16 @@ User.goOffline = function(user) {
     });
 };
 
+User.authorize = function(user, token) {
+    return db.gets('users', {userID: user.userID}).then(function(u) {
+        u = u[0];
+        return db.update('users', {userID: user.userID}, {venmoToken: token}).then(function() {
+            return u;
+        });
+    }).fail(function() {
+        return q.reject(DB_ERROR);
+    });
+
+};
+
 module.exports = User;
