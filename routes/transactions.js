@@ -4,6 +4,19 @@ var authorize = require('../middlewares/authorize');
 var Transaction = require('../services/transactions');
 var transactions = express.Router();
 
+transactions.get('/search', authorize.auth, function(req, res, next) {
+    var location = {
+        lat: parseInt(req.query.lat),
+        lng: parseInt(req.query.lng)
+    };
+    Transaction.search(res.locals.user, location).then(function(transaction) {
+        res.locals.data = transaction;
+        next();
+    }).fail(function(err) {
+       next(err);
+    });
+}, envelope);
+
 transactions.get('/:id', authorize.auth, function(req, res, next) {
     Transaction.get(req.params.id).then(function(transaction) {
         res.locals.data = transaction;
@@ -15,9 +28,8 @@ transactions.get('/:id', authorize.auth, function(req, res, next) {
 
 transactions.post('/', authorize.auth, function(req, res, next) {
     var user = res.locals.user;
-    //console.log(user);
-    user.location = {lat: res.body.lat, lng: res.body.lng};
-    Transaction.create(user, res.body.amount).then(function(transaction) {
+    user.location = {lat: req.body.lat, lng: req.body.lng};
+    Transaction.create(user, req.body.amount).then(function(transaction) {
         res.locals.data = transaction;
         next();
     }).fail(function(err) {

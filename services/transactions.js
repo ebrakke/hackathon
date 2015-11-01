@@ -19,7 +19,7 @@ Transaction.get = function(id) {
 };
 
 Transaction.create = function(user, amount) {
-    if (user.credit < amount) {
+    if (user.credit < parseInt(amount)) {
         return q.reject(INSUFFICIENT_CREDIT);
     }
     var transaction = {
@@ -39,7 +39,7 @@ Transaction.accept = function(tID, user) {
     return Transaction.get(tID).then(function(transaction) {
         transaction.fulfiller = user.userID;
         transaction.status = 'accepted';
-        console.log(transaction);
+        transaction.code = (Math.random() * 100000).toString().slice(0,5);
         return db.update('transactions', {tID: transaction.tID}, transaction).then(function() {
             transaction.fulfiller = user;
             return transaction;
@@ -57,7 +57,23 @@ Transaction.verify = function(code, tID) {
             return q.reject(INVALID_VERIFICATION_CODE);
         }
         return db.update('transactions', {tID: transaction.tID}, {status: 'complete'}).then(function() {
-            return true;
+            return db.update('user', {userID: transaction.fulfiller}, {$inc: {amount: (-1 * transaction.amount)}});
+        });
+    });
+};
+
+Transaction.search = function(user, loc) {
+    return db.update('users', {userID: user.userID}, {location: loc}).then(function() {
+        return db.gets('transactions', {
+            $and : [
+                {'requester.location.lat': {$lte: user.location.lat + .5}},
+                {'requester.location.lng': {$gte: user.location.lng -.5}},
+                {amount: {$lte: user.amount}}]}).then(function(transactions) {
+            if (transactions.length !== 0) {
+                return transactions[0];
+            }
+        }).fail(function(err) {
+            console.log(err);
         });
     });
 };

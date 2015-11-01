@@ -9,7 +9,7 @@ INVALID_AUTH_TOKEN = {code: 401, msg: 'Invalid Auth Token'};
 Auth.validateAuthToken = function(authToken) {
     return db.gets('users', {authToken: authToken}, {pHash:0, _id:0}).then(function(user) {
         if (user.length === 0) {
-            q.Reject(INVALID_AUTH_TOKEN);
+            return q.reject(INVALID_AUTH_TOKEN);
         }
         return user[0];
     });
