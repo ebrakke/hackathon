@@ -28,6 +28,7 @@ transactions.get('/:id', authorize.auth, function(req, res, next) {
 
 transactions.post('/', authorize.auth, function(req, res, next) {
     var user = res.locals.user;
+    console.log(req.body);
     user.location = {lat: req.body.lat, lng: req.body.lng};
     Transaction.create(user, req.body.amount).then(function(transaction) {
         res.locals.data = transaction;

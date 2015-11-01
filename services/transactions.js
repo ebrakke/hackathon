@@ -24,11 +24,12 @@ Transaction.create = function(user, amount) {
     }
     var transaction = {
         requester: user,
-        amount: amount,
+        amount: parseInt(amount),
         status: 'pending'
     };
     transaction.tID = utilities.createId({r: Math.random().toString(32)});
     return db.insert('transactions', transaction).then(function() {
+        console.log(transaction);
         return transaction;
     }).fail(function() {
         q.reject(DB_ERROR);
@@ -57,18 +58,19 @@ Transaction.verify = function(code, tID) {
             return q.reject(INVALID_VERIFICATION_CODE);
         }
         return db.update('transactions', {tID: transaction.tID}, {status: 'complete'}).then(function() {
-            return db.update('user', {userID: transaction.fulfiller}, {$inc: {amount: (-1 * transaction.amount)}});
+            return db.update('user', {userID: transaction.fulfiller}, {$inc: {amount: (-1 * parseInt(transaction.amount))}});
         });
     });
 };
 
 Transaction.search = function(user, loc) {
     return db.update('users', {userID: user.userID}, {location: loc}).then(function() {
+        user.amount = 100000;
         return db.gets('transactions', {
             $and : [
-                {'requester.location.lat': {$lte: user.location.lat + .5}},
-                {'requester.location.lng': {$gte: user.location.lng -.5}},
-                {amount: {$lte: user.amount}}]}).then(function(transactions) {
+                {status: 'pending'},
+                {amount: {$lte: 100}}]}).then(function(transactions) {
+            console.log(transactions);
             if (transactions.length !== 0) {
                 return transactions[0];
             }
