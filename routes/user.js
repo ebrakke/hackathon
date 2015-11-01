@@ -7,21 +7,20 @@ var user = express.Router();
 
 user.get('/:id', function(req, res, next) {
     var id = req.params.id;
-    var found_user = User.get(id).then(function(user) {
+    User.get(id).then(function(user) {
         delete user.pHash;
         res.locals.data = user;
         next();
     }).fail(function(err) {
         next(err);
-    })
+    });
 
 }, envelope);
 
 user.post('/', validate.user, function(req, res, next) {
-    var user = req.body;
-    var user_out = User.create(req.body).then(function(user_info) {
-        delete user_info.pHash;
-        res.locals.data = user_info;
+    User.create(req.body).then(function(userInfo) {
+        delete userInfo.pHash;
+        res.locals.data = userInfo;
         next();
     });
 
@@ -29,7 +28,7 @@ user.post('/', validate.user, function(req, res, next) {
 
 user.post('/auth', validate.checkLogin, function(req, res, next) {
     var userInupt = req.body;
-    var userData = User.login(userInupt).then(function(user){
+    User.login(userInupt).then(function(user) {
         delete user.pHash;
         res.locals.data = user;
         next();
@@ -42,7 +41,7 @@ user.post('/:id/online', authorize.auth, function(req, res, next) {
     var user = res.locals.user;
     var amount = req.body.amount;
 
-    var userOnline = User.goOnline(user, amount).then(function(userMod) {
+    User.goOnline(user, amount).then(function(userMod) {
         res.locals.data = userMod;
         next();
     }).fail(function(err) {
@@ -53,7 +52,7 @@ user.post('/:id/online', authorize.auth, function(req, res, next) {
 
 user.post('/:id/offline', authorize.auth, function(req, res, next) {
     var user = res.locals.user;
-    var userOnline = User.goOffline(user).then(function(userMod) {
+    User.goOffline(user).then(function(userMod) {
         res.locals.data = userMod;
         next();
     }).fail(function(err) {

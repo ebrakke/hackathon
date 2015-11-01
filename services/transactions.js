@@ -62,5 +62,4 @@ Transaction.verify = function(code, tID) {
     });
 };
 
-
 module.exports = Transaction;

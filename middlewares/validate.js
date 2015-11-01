@@ -6,8 +6,8 @@ var INVALID_LOGIN_FIELDS = {code: 400, msg: 'Not an email or password'};
 exports.user = function(req, res, next) {
     var user = req.body;
     var valid = validator.isEmail(user.email) &&
-            validator.isLength(user.password, 6) &&
-            validator.isMobilePhone(user.phoneNumber, 'en-US') &&
+            !!user.password &&
+            !!user.phoneNumber &&
             !!user.name;
     if (valid) {
         next();
@@ -19,7 +19,7 @@ exports.user = function(req, res, next) {
 exports.checkLogin = function(req, res, next) {
     var user = req.body;
     var valid = validator.isEmail(user.email) &&
-        validator.isLength(user.password, 6)
+        validator.isLength(user.password, 6);
     if (valid) {
         next();
     } else {

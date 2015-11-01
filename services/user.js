@@ -24,25 +24,22 @@ User.get = function(userID) {
 };
 
 User.create = function(user) {
-    var emailCheck = db.gets('users', {email: user.email}).then(function(found_user) {
-        if (found_user.length !== 0) {
-            console.log("Found user with that email!");
+    return db.gets('users', {email: user.email}).then(function(foundUser) {
+        if (foundUser.length !== 0) {
             return q.Reject(EMAIL_IN_USE);
         } else {
             var salt = bcrypt.genSaltSync(10);
-            var pw = user.pHash;
-            console.log("The password not hashed: " + pw);
+            var pw = user.password;
             var hash = bcrypt.hashSync(pw, salt);
-            console.log("The password hashed: " + hash);
             var token = util.generateToken();
-            console.log("The authToken is: " + token);
             user.pHash = hash;
+            delete user.password;
             var genID = util.createId(user.email, 'sha256');
-            console.log("The userID is: " + genID);
+            console.log(genID);
             user.authToken = token;
             user.userID = genID;
-            return db.insert('users', user).then(function(user) {
-                User.get(genID);
+            return db.insert('users', user).then(function() {
+                return user;
             });
         }
     });
@@ -81,6 +78,5 @@ User.goOffline = function(user) {
         return q.Reject(DB_ERROR);
     });
 };
-console.log(User.create({"name" : "Jenny Jenny", "email" : "somethingelse@xyz.com", "pHash" : "wololo", "phoneNum" : 8675309, "accepting" : true, "amount" : 45, "credit" : 67, "location" : { "latitude" : 9, "longitude" : 22 } }));
 
 module.exports = User;

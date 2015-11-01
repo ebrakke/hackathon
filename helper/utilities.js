@@ -16,9 +16,9 @@ exports.createId = function(attrs, alg) {
     return sum.digest('hex');
 };
 
-exports.generateToken = function(h) {
-    var hash = h || 'sha256';
+exports.generateToken = function() {
+    var hash = 'sha256';
     var randomNum = Math.random().toString();
-    var sum = crypto.createHash(h);
+    var sum = crypto.createHash(hash);
     return sum.update(randomNum).digest('hex');
 };

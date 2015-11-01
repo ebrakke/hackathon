@@ -26,7 +26,7 @@ exports.insert = function(col, doc) {
         });
     })
     .fail(function(e) {
-        console.log("Something went wrong on insert!");
+        console.log('Something went wrong on insert!');
         console.log(e);
     });
 
