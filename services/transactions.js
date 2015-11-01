@@ -29,7 +29,7 @@ Transaction.create = function(user, amount) {
     };
     transaction.tID = utilities.createId({r: Math.random().toString(32)});
     return db.insert('transactions', transaction).then(function() {
-        console.log(transaction);
+        return db.update('')
         return transaction;
     }).fail(function() {
         q.reject(DB_ERROR);
@@ -65,7 +65,6 @@ Transaction.verify = function(code, tID) {
 
 Transaction.search = function(user, loc) {
     return db.update('users', {userID: user.userID}, {location: loc}).then(function() {
-        user.amount = 100000;
         return db.gets('transactions', {
             $and : [
                 {status: 'pending'},
