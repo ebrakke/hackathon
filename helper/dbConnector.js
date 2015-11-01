@@ -27,6 +27,16 @@ exports.insert = function(col, doc) {
     });
 };
 
+exports.update = function(col, query, update) {
+    return mp.MongoClient.connect(connectionString).then(function(db) {
+        return db.collection(col).then(function(col) {
+            return col.update(query, update).then(function() {
+                console.log('successful update');
+            });
+        });
+    });
+};
+
 exports.remove = function(col, doc) {
     return mp.MongoClient.connect(connectionString).then(function(db) {
         return db.collection(col).then(function(col) {

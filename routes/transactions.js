@@ -5,37 +5,50 @@ var Transaction = require('../services/transactions');
 var transactions = express.Router();
 
 transactions.get('/:id', authorize.auth, function(req, res, next) {
-    var stubbedData = {
-        receiver : '00000002',
-        fulfiller : '00000001',
-        amount : 100,
-        status : 'accepted'
-    };
-    res.locals.data = stubbedData;
-    next();
+    Transaction.get(req.params.id).then(function(transaction) {
+        res.locals.data = transaction;
+        next();
+    }).fail(function(err) {
+        next(err);
+    });
 }, envelope);
 
 transactions.post('/', authorize.auth, function(req, res, next) {
-    var stubbedData = {
-        receiver : '00000002',
-        fulfiller : '00000001',
-        amount : 40,
-        status : 'pending'
-    };
-    res.locals.data = stubbedData;
-    next();
+    var user = res.locals.user;
+    user.location = {lat: res.body.lat, lng: res.body.lng};
+    Transaction.create(user, res.body.amount).then(function(transaction) {
+        res.locals.data = transaction;
+        next();
+    }).fail(function(err) {
+        next(err);
+    });
+}, envelope);
+
+transactions.post('/:id/accept', authorize.auth, function(req, res, next) {
+    Transaction.accept(req.params.id, res.locals.user).then(function(transaction) {
+        res.locals.data = transaction;
+        next();
+    }).fail(function(err) {
+        next(err);
+    });
 }, envelope);
 
 transactions.post('/:id/verify', authorize.auth, function(req, res, next) {
-    var stubbedData = {message : 'success'};
-    res.locals.data = stubbedData;
-    next();
+    Transaction.verify(req.body.code, req.params.id).then(function() {
+        res.locals.data = {msg: 'Success'};
+        next();
+    }).fail(function(err) {
+        next(err);
+    });
 }, envelope);
 
 transactions.delete('/:id', authorize.auth, function(req, res, next) {
-    var stubbedData = {message : 'success'};
-    res.locals.data = stubbedData;
-    next();
+    Transaction.delete(req.params.id).then(function() {
+        res.locals.data = {msg: 'Success'};
+        next();
+    }).fail(function(err) {
+        next(err);
+    });
 }, envelope);
 
 module.exports = transactions;

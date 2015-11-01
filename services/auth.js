@@ -8,11 +8,7 @@ var Auth = function() {
 };
 
 Auth.prototype.validateAuthToken = function(authToken) {
-    var user = {
-        userId: 'some id',
-        email: 'some@email.com'
-    };
-    return user;
+
 };
 
 Auth.prototype.createAuth = function(uid, update) {
