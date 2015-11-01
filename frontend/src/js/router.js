@@ -8,5 +8,8 @@ app.config(function($routeProvider) {
     }).when('/', {
         templateUrl: 'partials/pages/transaction.html',
         controller: 'TransactionCtrl'
+    }).when('/profile', {
+        templateUrl: 'partials/pages/profile.html',
+        controller: 'ProfileCtrl'
     });
 });
