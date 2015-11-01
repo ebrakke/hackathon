@@ -1,7 +1,7 @@
 'use strict';
 
 app.directive('backButton', function($rootScope, $timeout) {
-    return function(scope, element, attrs) {
+    return function(scope, element) {
         element.bind('click', function() {
             $rootScope.back = true;
 
