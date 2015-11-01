@@ -29,7 +29,7 @@ Transaction.create = function(user, amount) {
     };
     transaction.tID = utilities.createId({r: Math.random().toString(32)});
     return db.insert('transactions', transaction).then(function() {
-        console.log(transaction);
+        return db.update('')
         return transaction;
     }).fail(function() {
         q.reject(DB_ERROR);
@@ -66,7 +66,6 @@ Transaction.verify = function(code, tID) {
 Transaction.search = function(user, loc) {
     console.log('services search');
     return db.update('users', {userID: user.userID}, {location: loc}).then(function() {
-        //user.amount = 100000;
         return db.gets('users', {userID: user.userID}).then(function(u){
             return db.gets('transactions', {
                 $and : [
@@ -76,8 +75,7 @@ Transaction.search = function(user, loc) {
                 if (transactions.length !== 0) {
                     return transactions[0];
                 }
-        })
-
+            });
         }).fail(function(err) {
             console.log(err);
         });
