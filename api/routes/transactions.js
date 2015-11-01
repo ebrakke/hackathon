@@ -5,16 +5,10 @@ var transactions = express.Router();
 
 transactions.get('/:id', authorize.auth, function(req, res, next) {
     var stubbedData = {
-        name : 'Rick Sanchez',
-        email : 'wubbalubbadubdub@earth.com',
-        userID : '00000001',
-        phoneNum : 1111111111,
-        accepting : true,
+        receiver : '00000002',
+        fulfiller : '00000001',
         amount : 100,
-        credit: 30,
-        location : {
-            latitude : 100,
-            longitude : 23}
+        status : 'accepted'
     };
     res.locals.data = stubbedData;
     next();
