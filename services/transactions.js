@@ -56,7 +56,7 @@ Transaction.verify = function(code, tID) {
         if (transaction.code !== code) {
             return q.reject(INVALID_VERIFICATION_CODE);
         }
-        return db.update('transaction', {tID: transaction.tID}, {status: 'complete'}).then(function() {
+        return db.update('transactions', {tID: transaction.tID}, {status: 'complete'}).then(function() {
             return true;
         });
     });

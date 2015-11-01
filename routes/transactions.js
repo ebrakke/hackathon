@@ -38,6 +38,7 @@ transactions.post('/:id/verify', authorize.auth, function(req, res, next) {
         res.locals.data = {msg: 'Success'};
         next();
     }).fail(function(err) {
+        console.log('mess');
         next(err);
     });
 }, envelope);
