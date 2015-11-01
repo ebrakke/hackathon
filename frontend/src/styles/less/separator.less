@@ -1,0 +1,33 @@
+.separator {
+    text-align: center;
+    position: relative;
+    margin: 20px 0;
+
+    &__label {
+        background: #fff;
+        padding: 10px 20px;
+        color: @accent;
+        text-transform: uppercase;
+        display: inline-block;
+        position: relative;
+
+        &::before,
+        &::after {
+            content: '';
+            border-bottom: 5px solid @accent-darkest;
+            width: 100%;
+            position: absolute;
+            top: calc(50% - 5px);
+        }
+
+        &::before {
+            left: -100%;
+            margin-left: -20px;
+        }
+
+        &::after {
+            left: 100%;
+            margin-left: 20px;
+        }
+    }
+}
