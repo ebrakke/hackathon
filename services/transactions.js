@@ -62,4 +62,11 @@ Transaction.verify = function(code, tID) {
     });
 };
 
+Transaction.del = function(trID) {
+    return db.remove('transactions', {tID: trID}).then(function() {
+        return true;
+    });
+};
+
+
 module.exports = Transaction;

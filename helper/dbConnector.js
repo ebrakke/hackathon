@@ -45,7 +45,7 @@ exports.update = function(col, query, update) {
 exports.remove = function(col, doc) {
     return mp.MongoClient.connect(connectionString).then(function(db) {
         return db.collection(col).then(function(col) {
-            return col.remove(doc, {justOne: true}).then(function(err, doc) {
+            return col.remove(doc).then(function(err, doc) {
                 console.log('successful delete' + doc);
             });
         });

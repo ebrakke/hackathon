@@ -15,6 +15,7 @@ transactions.get('/:id', authorize.auth, function(req, res, next) {
 
 transactions.post('/', authorize.auth, function(req, res, next) {
     var user = res.locals.user;
+    //console.log(user);
     user.location = {lat: res.body.lat, lng: res.body.lng};
     Transaction.create(user, res.body.amount).then(function(transaction) {
         res.locals.data = transaction;
@@ -44,12 +45,13 @@ transactions.post('/:id/verify', authorize.auth, function(req, res, next) {
 }, envelope);
 
 transactions.delete('/:id', authorize.auth, function(req, res, next) {
-    Transaction.delete(req.params.id).then(function() {
+    Transaction.del(req.params.id).then(function() {
         res.locals.data = {msg: 'Success'};
         next();
     }).fail(function(err) {
         next(err);
     });
 }, envelope);
+
 
 module.exports = transactions;
